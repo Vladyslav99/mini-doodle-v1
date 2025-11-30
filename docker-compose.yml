@@ -7,19 +7,20 @@ services:
       context: .
     container_name: mini-doodle-v1
     depends_on:
-      - db
+      - doodle-db
     environment:
       - POSTGRES_USER=minidoodlev1
       - POSTGRES_PASSWORD=minidoodlev1
       - SPRING_DATASOURCE_URL=jdbc:postgresql://doodle-db:5432/doodle_db
       - SPRING_DATASOURCE_USERNAME=minidoodlev1
       - SPRING_DATASOURCE_PASSWORD=minidoodlev1
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_DATASOURCE_DRIVER=org.postgresql.Driver
+      - SPRING_JPA_HIBERNATE_DDL=validate
 
     ports:
       - "8080:8080"
 
-  db:
+  doodle-db:
     image: "postgres:latest"
     container_name: doodle-db
     environment:
