@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +24,8 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "availabilities")
 public class Availability {
@@ -43,4 +48,8 @@ public class Availability {
 
     @Column(name = "owner_id")
     private Long ownerId;
+
+    @Version
+    @Column(name = "version")
+    private Integer version;
 }

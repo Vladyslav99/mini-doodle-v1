@@ -12,6 +12,7 @@ import com.codingchallenge.minidoodlev1.mapper.AvailabilityResponseMapper;
 import com.codingchallenge.minidoodlev1.repository.AvailabilityRepository;
 import com.codingchallenge.minidoodlev1.service.AvailabilityService;
 import com.codingchallenge.minidoodlev1.specification.AvailabilitySpecification;
+import com.codingchallenge.minidoodlev1.utils.ErrorMessages;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,9 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AvailabilityServiceImpl implements AvailabilityService {
 
-    private static final String AVAILABILITY_NOT_FOUND_MESSAGE = "Availability not found by id = [%s]";
-    private static final String AVAILABILITY_CONFLICT_MESSAGE = "The requested time slot conflicts with an existing availability.";
-
     private final AvailabilityRepository availabilityRepository;
     private final AvailabilityEntityMapper availabilityEntityMapper;
     private final AvailabilityResponseMapper availabilityResponseMapper;
@@ -37,7 +35,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         Instant startDateTime = availabilityCreationRequest.startDateTime();
         Instant endDateTime = availabilityCreationRequest.endDateTime();
         if (availabilityRepository.existsByOwnerIdAndStartDateTimeBeforeAndEndDateTimeAfter(userId, endDateTime, startDateTime)) {
-            throw new AvailabilityConflictException(AVAILABILITY_CONFLICT_MESSAGE);
+            throw new AvailabilityConflictException(ErrorMessages.AVAILABILITY_CONFLICT_MESSAGE);
         }
         Availability newAvailability = availabilityEntityMapper.toEntity(availabilityCreationRequest);
         newAvailability.setOwnerId(userId);
@@ -63,18 +61,18 @@ public class AvailabilityServiceImpl implements AvailabilityService {
             availabilityRepository.deleteById(availabilityId);
             return;
         }
-        throw new ResourceNotFoundException(String.format(AVAILABILITY_NOT_FOUND_MESSAGE, availabilityId));
+        throw new ResourceNotFoundException(String.format(ErrorMessages.AVAILABILITY_NOT_FOUND_MESSAGE, availabilityId));
     }
 
     @Override
     @Transactional
     public AvailabilityResponse updateAvailability(Long ownerId, Long availabilityId, AvailabilityUpdateRequest availabilityUpdateRequest) {
         Availability availability = availabilityRepository.findByIdAndOwnerId(availabilityId, ownerId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(AVAILABILITY_NOT_FOUND_MESSAGE, availabilityId)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.AVAILABILITY_NOT_FOUND_MESSAGE, availabilityId)));
         Instant startDateTime = availabilityUpdateRequest.startDateTime();
         Instant endDateTime = availabilityUpdateRequest.endDateTime();
         if (availabilityRepository.existsByOwnerIdAndStartDateTimeBeforeAndEndDateTimeAfter(ownerId, endDateTime, startDateTime)) {
-            throw new AvailabilityConflictException(AVAILABILITY_CONFLICT_MESSAGE);
+            throw new AvailabilityConflictException(ErrorMessages.AVAILABILITY_CONFLICT_MESSAGE);
         }
         availability.setStartDateTime(startDateTime);
         availability.setEndDateTime(endDateTime);

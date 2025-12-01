@@ -8,6 +8,10 @@ import java.time.Instant;
 
 public class AvailabilitySpecification {
 
+    public static Specification<Availability> availabilityId(Long availabilityId) {
+        return (root, query, cb) -> cb.equal(root.get("id"), availabilityId);
+    }
+
     public static Specification<Availability> ownerId(Long ownerId) {
         return (root, query, cb) -> cb.equal(root.get("ownerId"), ownerId);
     }

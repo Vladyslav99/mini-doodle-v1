@@ -40,8 +40,10 @@ class AvailabilityServiceImplTest {
 
     @Mock
     private AvailabilityRepository availabilityRepository;
+
     @Mock
     private AvailabilityEntityMapper availabilityEntityMapper;
+
     @Mock
     private AvailabilityResponseMapper availabilityResponseMapper;
 
