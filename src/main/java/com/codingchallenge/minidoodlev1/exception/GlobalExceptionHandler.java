@@ -63,4 +63,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(AvailabilityBookedException.class)
+    public ResponseEntity<ErrorDetailsResponse> handleAvailabilityConflict(AvailabilityBookedException exception, WebRequest request) {
+        ErrorDetailsResponse response = new ErrorDetailsResponse(
+                Instant.now(),
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                exception.getMessage(),
+                request.getDescription(false).substring(4),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
 }

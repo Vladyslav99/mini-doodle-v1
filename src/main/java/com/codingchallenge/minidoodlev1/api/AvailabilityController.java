@@ -43,7 +43,9 @@ public class AvailabilityController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Availability created successfully",
                             content = @Content(schema = @Schema(implementation = AvailabilityResponse.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content)
+                    @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content),
+                    @ApiResponse(responseCode = "409", description = "Availability conflict detected", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Availability not found", content = @Content)
             }
     )
     public AvailabilityResponse createAvailability(
@@ -59,6 +61,7 @@ public class AvailabilityController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Availabilities retrieved successfully",
                             content = @Content(schema = @Schema(implementation = AvailabilityResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Availability not found", content = @Content)
             }
     )
     public List<AvailabilityResponse> queryAvailabilities(
@@ -83,7 +86,8 @@ public class AvailabilityController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Availability updated successfully",
                             content = @Content(schema = @Schema(implementation = AvailabilityResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "Availability not found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Availability not found", content = @Content),
+                    @ApiResponse(responseCode = "409", description = "Availability conflict detected", content = @Content)
             }
     )
     public AvailabilityResponse updateAvailability(
@@ -102,7 +106,7 @@ public class AvailabilityController {
             description = "Deletes the specified availability",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Deleted successfully", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Availability not found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Availability not found", content = @Content),
             }
     )
     public void deleteAvailability(
